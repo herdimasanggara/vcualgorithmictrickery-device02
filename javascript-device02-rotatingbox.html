@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Rotating Box</title>
+<style>
+  #box {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    margin: 100px auto;
+    transform: rotate3d(0,0,0,0deg);
+    transition: transform 0.5s;
+  }
+  body {
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div id="box"></div>
+
+<script>
+if (window.DeviceOrientationEvent) {
+  window.addEventListener('deviceorientation', function(event) {
+    var alpha = event.alpha;
+    var beta = event.beta;
+    var gamma = event.gamma;
+    document.getElementById('box').style.transform = 
+      'rotateZ(' + alpha + 'deg) ' +
+      'rotateX(' + beta + 'deg) ' +
+      'rotateY(' + gamma + 'deg)';
+  });
+} else {
+  document.body.innerHTML = "<p>DeviceOrientationEvent is not supported by your device.</p>";
+}
+</script>
+
+</body>
+</html>

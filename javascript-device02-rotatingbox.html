@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Device Motion/Orientation Demo 02</title>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #box {
+    width: 200px;
+    height: 200px;
+    background-color: blue;
+    transition: transform 0.5s;
+  }
+  body {
+    text-align: center;
+    position: relative;
+  }
+  #requestButton {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+
+<div id="box"></div>
+<button id="requestButton" onclick="requestAccess()">Enable Device Orientation</button>
+
+<script>
+    function handleOrientation(event) {
+        var alpha = event.alpha;
+        var beta = event.beta;
+        var gamma = event.gamma;
+
+        document.getElementById('box').style.transform = 
+          'rotateZ(' + alpha + 'deg) ' +
+          'rotateX(' + beta + 'deg) ' +
+          'rotateY(' + gamma + 'deg)';
+    }
+
+    function requestAccess() {
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation, false);
+                        document.getElementById('requestButton').style.display = 'none';
+                    }
+                })
+                .catch(console.error);
+        } else {
+            window.addEventListener('deviceorientation', handleOrientation, false);
+        }
+    }
+
+    if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        document.getElementById('requestButton').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
